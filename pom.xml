@@ -12,6 +12,7 @@
 	<artifactId>bookmyplan</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bookmyplan</name>
+    <packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
