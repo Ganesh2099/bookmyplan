@@ -12,7 +12,7 @@
 	<artifactId>bookmyplan</artifactId>
 	<version>0.0.1-SNAPSHOT.${env.BUILD_NUMBER}</version>
 	<name>bookmyplan</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
