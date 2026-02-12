@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'jenkins' }
+    agent any
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
