@@ -8,6 +8,8 @@ pipeline {
 
     tools {
         maven 'mvn_3.9.12'
+
+
     }
 
     stages {
