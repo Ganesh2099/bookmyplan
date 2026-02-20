@@ -41,7 +41,7 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 echo 'Building Docker Image and Tagging...'
-                sh "docker build -t Ganesh2099/bookmyplan:latest -t bookmyplan:latest ."
+                sh "docker build -t ganesh2099/bookmyplan:latest -t bookmyplan:latest ."
                 echo 'Docker Image Build Completed!'
             }
         }
@@ -57,9 +57,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]) {
-                        sh 'docker login docker.io -u Ganesh2099 -p ${dockerhubCred}'
+                        sh 'docker login docker.io -u ganesh2099 -p ${dockerhubCred}'
                         echo 'Pushing Docker Image to Docker Hub...'
-                        sh 'docker push Ganesh2099/bookmyplan:latest'
+                        sh 'docker push ganesh2099/bookmyplan:latest'
                         echo 'Docker Image Pushed to Docker Hub Successfully!'
                     }
                 }
@@ -85,7 +85,7 @@ pipeline {
             steps {
                 echo 'Cleaning Up Local Docker Images...'
                 sh '''
-                    docker rmi Ganesh2099/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi ganesh2099/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi 358262661331.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi 3.108.228.196:8085/bookmyplan:latest
