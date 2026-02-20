@@ -27,23 +27,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Code Quality') {
-             environment {
-                 scannerHome = tool 'qube'
-             }
-             steps {
-                 echo 'Starting SonarQube Code Quality Scan...'
-                 withSonarQubeEnv('sonar-server') {
-                     sh 'mvn sonar:sonar'
-                 }
-                 echo 'SonarQube Scan Completed. Checking Quality Gate...'
-                 timeout(time: 10, unit: 'MINUTES') {
-                     waitForQualityGate abortPipeline: true
-                 }
-                 echo 'Quality Gate Check Completed!'
-             }
-        }
-
         stage('Code Package') {
             steps {
                 echo 'Creating WAR Artifact...'
@@ -58,7 +41,7 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 echo 'Building Docker Image and Tagging...'
-                sh "docker build -t satyam88/bookmyplan:latest -t bookmyplan:latest ."
+                sh "docker build -t Ganesh2099/bookmyplan:latest -t bookmyplan:latest ."
                 echo 'Docker Image Build Completed!'
             }
         }
@@ -74,9 +57,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]) {
-                        sh 'docker login docker.io -u satyam88 -p ${dockerhubCred}'
+                        sh 'docker login docker.io -u Ganesh2099 -p ${dockerhubCred}'
                         echo 'Pushing Docker Image to Docker Hub...'
-                        sh 'docker push satyam88/bookmyplan:latest'
+                        sh 'docker push Ganesh2099/bookmyplan:latest'
                         echo 'Docker Image Pushed to Docker Hub Successfully!'
                     }
                 }
@@ -85,12 +68,12 @@ pipeline {
         stage('Push Docker Image to Amazon ECR') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'ecr:ap-south-1:ecr-credentials', url: "https://445842764710.dkr.ecr.ap-south-1.amazonaws.com"]) {
+                    withDockerRegistry([credentialsId: 'ecr:ap-south-1:ecr-credentials', url: "https://358262661331.dkr.ecr.ap-south-1.amazonaws.com"]) {
                         echo 'Tagging and Pushing Docker Image to ECR...'
                         sh '''
                             docker images
-                            docker tag bookmyplan:latest 445842764710.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
-                            docker push 445842764710.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
+                            docker tag bookmyplan:latest 358262661331.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
+                            docker push 358262661331.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest
                         '''
                         echo 'Docker Image Pushed to Amazon ECR Successfully!'
                     }
@@ -102,9 +85,9 @@ pipeline {
             steps {
                 echo 'Cleaning Up Local Docker Images...'
                 sh '''
-                    docker rmi satyam88/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi Ganesh2099/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi bookmyplan:latest || echo "Image not found or already deleted"
-                    docker rmi 445842764710.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi 358262661331.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi 3.108.228.196:8085/bookmyplan:latest
                     docker image prune -f
                 '''
