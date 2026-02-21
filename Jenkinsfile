@@ -80,7 +80,19 @@ pipeline {
                 }
             }
         }
-
+        stage('Upload Docker Image to Nexus') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login http://13.203.68.202:8085/repository/bookmyplan/ -u admin -p ${PASSWORD}'
+                        echo "Push Docker Image to Nexus : In Progress"
+                        sh 'docker tag bookmyplan 13.203.68.202:8085/bookmyplan:latest'
+                        sh 'docker push 13.203.68.202:8085/bookmyplan'
+                        echo "Push Docker Image to Nexus : Completed"
+                    }
+                }
+            }
+        }
         stage('Clean Up Local Docker Images') {
             steps {
                 echo 'Cleaning Up Local Docker Images...'
@@ -88,6 +100,7 @@ pipeline {
                     docker rmi ganesh2099/bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi bookmyplan:latest || echo "Image not found or already deleted"
                     docker rmi 358262661331.dkr.ecr.ap-south-1.amazonaws.com/bookmyplan:latest || echo "Image not found or already deleted"
+                    docker rmi 13.203.68.202:8085/bookmyplan:latest
                     docker image prune -f
                 '''
                 echo 'Local Docker Images Cleaned Up Successfully!'
