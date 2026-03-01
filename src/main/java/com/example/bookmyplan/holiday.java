@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class railways {
+public class holiday {
 
-    @GetMapping("/railways")
+    @GetMapping("/holiday")
     public String getData() {
-        return "Hello Welcome to BookMyPlan, Please book railways tickets at 10% discount";
+        return "Hello Welcome to BookMyPlan, Please book holiday tickets at 10% discount";
     }
 }
